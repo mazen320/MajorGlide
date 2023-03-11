@@ -43,6 +43,8 @@ public class EnemyManager : MonoBehaviour
     public float hoverAmp;
     private float startYPos;
 
+    public static List<EnemyManager> instances = new List<EnemyManager>();
+
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -61,6 +63,9 @@ public class EnemyManager : MonoBehaviour
         hoverSpeed = Random.Range(0.1f, hoverSpeed);
         hoverAmp = Random.Range(0.3f, hoverAmp);
     }
+
+    private void Awake() { instances.Add(this); }
+    private void OnDestroy() { instances.Remove(this); }
 
     private void Update()
     {

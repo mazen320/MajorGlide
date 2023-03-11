@@ -20,9 +20,9 @@ public class BulletManager : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        bulletPool = GameObject.Find("Bullet Pool").transform;
+        /*bulletPool = GameObject.Find("Bullet Pool").transform;
 
-        transform.parent = bulletPool;
+        transform.parent = bulletPool;*/
     }
 
     void Update()

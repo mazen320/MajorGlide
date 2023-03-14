@@ -75,10 +75,14 @@ public class PlayerController : MonoBehaviour
     public List<GameObject> trails;
     public Transform glidingCheck1;
     public Transform glidingCheck2;
-    private bool canGlide;
-    private bool canInitJump;
+    public bool canGlide;
+    public bool canInitJump;
     public bool gliding;
     private bool wasGliding;
+    public float glideEnergy = 100f;
+    public float glideEnergyDepletionRate = 10f;
+    public float glideEnergyRegenRate = 5f;
+    public Slider glideEnergySlider;
 
     //Animation
     [Header("Animation")]
@@ -140,8 +144,23 @@ public class PlayerController : MonoBehaviour
             shooting = false;
             laserImpactLight.intensity = 0f;
         }
-        // check grounded
+
         CheckGrounded();
+
+        if (gliding)
+        {
+            glideEnergy -= Time.deltaTime * glideEnergyDepletionRate;
+            glideEnergySlider.value = glideEnergy;
+
+            if (glideEnergy <= 0)
+            {
+                glideEnergy = 0;
+                canInitJump = false;
+                gliding = false;
+                canGlide = false;
+                playerVelocity += transform.up * normalGravityValue * fallMultiplier;
+            }
+        }
 
         // realistic fall
         if (!grounded && playerVelocity.y < 0 && !gliding)
@@ -189,7 +208,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // gliding
-        if (playerVelocity.y <= 0 && !grounded && canGlide)
+        if (playerVelocity.y <= 0 && !grounded && canGlide  && glideEnergy > 0)
         {
             playerVelocity.y = 0f;
 
@@ -223,7 +242,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // apply gravity
         controller.Move(playerVelocity * Time.deltaTime);
     }
 

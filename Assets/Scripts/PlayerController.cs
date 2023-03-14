@@ -371,6 +371,11 @@ public class PlayerController : MonoBehaviour
             playerVelocity.y = 0f;
             jumping = false;
             gliding = false;
+            if (glideEnergy < 100)
+            {
+                glideEnergy += glideEnergyRegenRate * Time.deltaTime;
+                glideEnergySlider.value = glideEnergy;
+            }
         }
     }
 }
